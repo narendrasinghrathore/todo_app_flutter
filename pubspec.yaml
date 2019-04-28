@@ -45,6 +45,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - lib/assets/images/evie-shaffer-1522833-unsplash-flower.jpg
+     - lib/assets/images/sunsetsquare.jpg
   #  - images/a_dot_ham.jpeg
      - lib/data/todo_items.json
      - lib/data/regular_units.json
@@ -69,14 +70,20 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: ubuntu
+      fonts:
+        - asset: fonts/ubuntu/Ubuntu-Regular.ttf
+        - style: normal
+        - asset: fonts/ubuntu/Ubuntu-Italic.ttf
+        - style: italic
     - family: DidactGothic_Regular
       fonts:
         - asset: fonts/DidactGothic-Regular.ttf
-          style: normal
+        - style: normal
     - family: RighteousRegular
       fonts:
         - asset: fonts/RighteousRegular.ttf
-          style: normal
+        - style: normal
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

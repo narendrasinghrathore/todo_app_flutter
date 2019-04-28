@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/widgets/stateful/category_route.dart';
-import 'package:todo_app_flutter/widgets/stateful/home.dart';
-import 'package:todo_app_flutter/widgets/stateful/login.dart';
-import 'package:todo_app_flutter/widgets/stateful/unit_convertor.dart';
+import 'package:flutter/services.dart';
+
+// Imports of our custom widgets
+import 'package:todo_app_flutter/widgets/stateful/login/login.dart';
 import 'package:todo_app_flutter/widgets/stateless/about.dart';
-import 'package:todo_app_flutter/widgets/stateless/list-item.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,6 +11,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // hide status bar.
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Todo App',
@@ -25,21 +27,28 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.lightBlue,
-        accentColorBrightness: Brightness.light,
-        fontFamily: 'RighteousRegular',
+        primarySwatch: Colors.purple,
+        accentColorBrightness: Brightness.dark,
+        fontFamily: 'ubuntu',
         textTheme: Theme.of(context).textTheme.apply(
-              bodyColor: Colors.black,
-              displayColor: Colors.grey[600],
+              bodyColor: Colors.white,
+              displayColor: Colors.white,
+              decorationColor: Colors.white
             ),
       ),
       // home: MyHomePage(
       // title: 'Todo App',
       // ),
-      home:  HomePage(), //LoginPage()
+      // home:  HomePage(), //LoginPage()
       routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) => AppLogin(),
         '/about': (BuildContext context) => AboutPage()
       },
+      darkTheme: ThemeData(
+          accentColor: Colors.green[900],
+          backgroundColor: Colors.green[900],
+          buttonColor: Colors.green),
+      initialRoute: '/',
     );
   }
 }
