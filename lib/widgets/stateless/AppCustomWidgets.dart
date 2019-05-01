@@ -11,7 +11,8 @@ class AppCustomWidgets {
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           gradient: LinearGradient(
-            colors: [Colors.purple, Colors.deepPurple],
+            begin: Alignment.topCenter,
+            colors: [Colors.deepPurple, Colors.black38],
           ),
         ),
         child: Center(
@@ -21,21 +22,21 @@ class AppCustomWidgets {
             child: Column(
               children: [
                 Text(
-                  'You should login first!',
+                  'You have to login first!',
                   style: TextStyle(
                     fontSize: 24,
-                    color: Colors.white,
+                    color: Colors.grey,
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 RaisedButton(
-                  color: Colors.deepPurpleAccent,
+                  color: Colors.deepPurple,
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/');
                   },
-                  child: Icon(Icons.navigation),
+                  child: Icon(Icons.navigation, size: 30,color: Colors.black,),
                   padding: EdgeInsets.all(20),
                 ),
               ],
