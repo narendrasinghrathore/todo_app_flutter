@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:todo_app_flutter/AppRoutes.dart';
 
 // Imports of our custom widgets
 import 'package:todo_app_flutter/widgets/stateful/login/login.dart';
@@ -11,8 +13,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // hide status bar.
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    // hide status bar and bottom navigation bar.
+    SystemChrome.setEnabledSystemUIOverlays([]);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -40,17 +42,16 @@ class MyApp extends StatelessWidget {
       // title: 'Todo App',
       // ),
       // home:  HomePage(), //LoginPage()
-      routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) => AppLogin(),
-        '/about': (BuildContext context) => AboutPage()
-      },
+      routes: AppRoutes.routes,
       darkTheme: ThemeData(
           accentColor: Colors.green[900],
           backgroundColor: Colors.green[900],
           buttonColor: Colors.green),
-      initialRoute: '/',
+      initialRoute: '/home',
     );
   }
+
+  
 }
 
 class MyHomePage extends StatefulWidget {
