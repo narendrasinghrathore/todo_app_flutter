@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:todo_app_flutter/models/User.dart';
 import 'package:todo_app_flutter/services/AppFactoryService.dart';
+import 'package:todo_app_flutter/services/AppFactoryWidgets.dart';
 import 'package:todo_app_flutter/services/common.service.dart';
 import 'package:todo_app_flutter/services/firebase/auth.service.dart';
 import 'package:todo_app_flutter/services/user.service.dart';
@@ -39,6 +41,50 @@ class _AppLoginState extends State<AppLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.deepPurple,
+      floatingActionButton: Builder(builder: (BuildContext context) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 60,
+          child: RaisedButton(
+            elevation: 8.0,
+            color: Colors.deepPurpleAccent,
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                print('Valid  ${myController.text}');
+                // If the form is valid, display a snackbar. In the real world, you'd
+                // often want to call a server or save the information in a database
+
+                var auth = AppFactoryService.appFirebaseAuth;
+                var a =
+                    AppFactoryWidgets.showSpinner(context, 'Authenticating...');
+
+                auth
+                    .loginUser(myController.text, passwordContorller.text)
+                    .take(1)
+                    .listen(
+                        (a) {
+                          AppUser.user$.add(a);
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                "Authentication done, let's explore ${a.displayName}"),
+                          ));
+                          Navigator.pushReplacementNamed(context, '/home');
+                        },
+                        cancelOnError: true,
+                        onDone: () {
+                          a.close();
+                        });
+              }
+            },
+            child: Text('Login',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                )),
+          ),
+        );
+      }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: new CustomBuilder(
           circularRadius20: circularRadius20,
           headerImage: _headerImage,
@@ -71,53 +117,33 @@ class CustomBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (BuildContext context) {
       return SafeArea(
-        child: Center(
-          child: Container(
-            margin: EdgeInsets.all(10.0),
-            width: MediaQuery.of(context).size.width * .9,
-            height: MediaQuery.of(context).size.height * .8,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black,
-                    offset: Offset(0.0, 15.0),
-                    blurRadius: 35.0),
-                BoxShadow(
-                    color: Colors.black,
-                    offset: Offset(0.0, -1.0),
-                    blurRadius: 10.0),
-              ],
-              borderRadius: BorderRadius.only(
-                topLeft: circularRadius20,
-                topRight: circularRadius20,
-              ),
-              color: Colors.white,
-              gradient: LinearGradient(
-                colors: [Colors.deepPurple, Colors.purple],
-                begin: Alignment.bottomCenter,
-              ),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.deepPurple, Colors.purple],
+              begin: Alignment.bottomCenter,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 300,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topRight: circularRadius20,
-                          topLeft: circularRadius20),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(_headerImage),
-                      ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topRight: circularRadius20, topLeft: circularRadius20),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage(_headerImage),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: buildForm(context),
-                  ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: buildForm(context),
+                ),
+              ],
             ),
           ),
         ),
@@ -186,43 +212,6 @@ class CustomBuilder extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 60,
-            child: RaisedButton(
-              elevation: 8.0,
-              color: Colors.deepPurpleAccent,
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  print('Valid  ${emailController.text}');
-                  // If the form is valid, display a snackbar. In the real world, you'd
-                  // often want to call a server or save the information in a database
-
-                  var auth = AppFactoryService.appFirebaseAuth;
-
-                  auth
-                      .loginUser(emailController.text, passwordController.text)
-                      .take(1)
-                      .listen((a) {
-                    AppUser.user$.add(a);
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "Authentication done, let's explore ${a.displayName}"),
-                    ));
-                    Navigator.pushReplacementNamed(context, '/home');
-                  });
-                }
-              },
-              child: Text('Login',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  )),
-            ),
           ),
         ],
       ),

@@ -32,7 +32,6 @@ class _AppHomeState extends State<AppHome> {
     }
   }
 
- 
   Scaffold showHome(context) {
     return Scaffold(
       body: Stack(
@@ -42,10 +41,12 @@ class _AppHomeState extends State<AppHome> {
               color: Colors.black,
             ),
             child: Center(
-              child: Text(
-                'Welcome to Dashboard',
-                style: TextStyle(
-                  fontSize: 24.0,
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'Welcome, ${user.displayName}',
+                  style: TextStyle(fontSize: 24.0, color: Colors.white),
+                  softWrap: true,
                 ),
               ),
             ),
@@ -53,29 +54,45 @@ class _AppHomeState extends State<AppHome> {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
         highlightElevation: 12.0,
         onPressed: () {
-          // Make sure to call setState. This tells Flutter to rebuild the
-          // UI with the changes.
-          setState(() {
-            // Create a random number generator.
-            final random = Random();
-            // Generate a random color.
-            _color = Color.fromRGBO(
-              random.nextInt(256),
-              random.nextInt(256),
-              random.nextInt(256),
-              1,
-            );
-
-            // Generate a random border radius.
-            _borderRadius =
-                BorderRadius.circular(random.nextInt(100).toDouble());
-          });
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    titleTextStyle:
+                        TextStyle(color: Colors.deepPurple, fontSize: 24),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Update'),
+                        onPressed: () {
+                           Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                    title: Text(user.displayName),
+                    content: SizedBox(
+                      // height: MediaQuery.of(context).size.height / 4 * .2,
+                      child: TextFormField(
+                        style: TextStyle(color: Colors.deepPurple),
+                        initialValue: user.displayName,
+                      ),
+                    ),
+                  ));
         },
-        tooltip: 'Toggle Opacity',
-        child: Icon(Icons.flip),
+        tooltip: 'Profile Setting',
+        child: Icon(
+          Icons.person,
+          color: Colors.deepPurple,
+        ),
       ),
     );
   }
